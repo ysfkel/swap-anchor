@@ -12,7 +12,7 @@ pub enum SwapProgramError {
     /// stored in the `LiquidityPool` state, thus that asset has not been
     /// provided as liquidity to the pool and cannot be swapped
     #[msg("An invalid asset mint address was provided")]
-    InvalidAsset,
+    InvalidAssetKey,
 
     /// The amount of the "pay" asset that a user has proposed to pay results,
     /// after calculation of the function `r = f(p)`, in a value for `r` that is
@@ -34,4 +34,7 @@ pub enum SwapProgramError {
     #[msg("A user cannot propose to pay 0 of an asset")]
     InvalidSwapZeroAmount,
 
+    // When user tries to add a asset key which is already in the pool
+    #[msg("The asset is already in the pool")]
+    InvalidAssetAlreadyInPool,
 }

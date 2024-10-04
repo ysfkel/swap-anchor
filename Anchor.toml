@@ -11,8 +11,11 @@ swap_program = "8zqSfMnEpWih9EbDqGRrkG97o3NSX8ojwwoYh9sqdmn7"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "devnet" # "Localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+#test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+upload-json = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/upload-json.test.ts"
+upload = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/upload.test.ts"
+token = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/util/token.ts"
