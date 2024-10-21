@@ -45,6 +45,8 @@ pub struct AddPair<'info> {
    )]
     pub lp_mint: Box<InterfaceAccount<'info, Mint>>,
 
+    pub creator_lp_token: Box<InterfaceAccount<'info, TokenAccount>>,
+
     //    #[account(
     //        seeds = [
     //         PAIR_SEED,
@@ -58,12 +60,23 @@ pub struct AddPair<'info> {
     //       mut,
     //       token::mint = lp_mint::
     //    )]
+
     pub token_0_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(mut)]
     pub token_1_mint: Box<InterfaceAccount<'info, Mint>>,
 
+    #[account(
+        mut, 
+        token::mint = token_0_mint,
+        token::authority = signer,
+    )]
     pub token_0_account: Box<InterfaceAccount<'info, TokenAccount>>,
 
+    #[account(
+        mut,
+        token::mint = token_1_mint,
+        token::authority = signer,
+    )]
     pub token_1_account: Box<InterfaceAccount<'info, TokenAccount>>,
 
     #[account(mut)]
