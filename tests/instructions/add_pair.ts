@@ -12,6 +12,7 @@ export async function add_pair(
     token0Account: PublicKey,
     token1Account: PublicKey,
     lpMint: PublicKey,
+    lpAccount: PublicKey,
     program: anchor.Program<SwapProgram>,
     
 ) {
@@ -22,6 +23,7 @@ export async function add_pair(
         token0Account,
         token1Account,
         lpMint,
+        lpAccount,
         signer: payer.publicKey,
         rent: anchor.web3.SYSVAR_RENT_PUBKEY,
         tokenProgra: anchor.utils.token.TOKEN_PROGRAM_ID,

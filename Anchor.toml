@@ -6,7 +6,7 @@ skip-lint = false
 
 [programs.localnet]
 # [programs.devnet]
-swap_program = "9aRBo71kfSnqkN5Ls8giHnVmaAzT96XKQYGbixRwxoLU"
+swap_program = "26SLSwPP1Ai5ECS38nd7Ju96KrBUB96mSB2KwziSCVSX"
 
 [registry]
 url = "https://api.apr.dev"

@@ -111,6 +111,11 @@ describe("swap-program", () => {
         console.log('error pooladdress ', e)
     }
 
+    let lp_account =  anchor.utils.token.associatedAddress({
+        mint: lp_mint,
+        owner: payer.publicKey
+    })
+
       await add_pair(
          authority,
          payer,
@@ -119,6 +124,7 @@ describe("swap-program", () => {
          (await tokenAccount1).address,
          (await tokenAccount2).address,
          lp_mint,
+         lp_account,
          program
       )
 

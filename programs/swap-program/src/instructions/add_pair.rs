@@ -1,31 +1,24 @@
 use crate::{
-    seeds::{LP_SEED, PAIR_SEED},
     error::SwapProgramError::InvalidInputTokensMismatch,
     seeds::AUTH_SEED,
+    seeds::{LP_SEED, PAIR_SEED},
 };
 use anchor_lang::prelude::*;
 use anchor_spl::{
-    token_interface::{Mint,
-        TokenAccount
-    },
+    associated_token::AssociatedToken,
     token::{
-    //TokenAccount,
-    Token,
-    
-}};
+        //TokenAccount,
+        Token,
+    },
+    token_interface::{Mint, TokenAccount},
+};
 
 pub fn add_pair(ctx: Context<AddPair>) -> Result<()> {
-
-
- 
-
     Ok(())
 }
 
-
 #[derive(Accounts)]
 pub struct AddPair<'info> {
-
     /// CHECK: pool vault and lp mint authority
     #[account(
         seeds=[AUTH_SEED],
@@ -45,7 +38,14 @@ pub struct AddPair<'info> {
    )]
     pub lp_mint: Box<InterfaceAccount<'info, Mint>>,
 
-    pub creator_lp_token: Box<InterfaceAccount<'info, TokenAccount>>,
+    #[account(
+      init,
+       associated_token::mint = lp_mint,
+       associated_token::authority = signer,
+       payer = signer,
+       token::token_program = token_program,
+    )]
+    pub lp_account: Box<InterfaceAccount<'info, TokenAccount>>,
 
     //    #[account(
     //        seeds = [
@@ -60,15 +60,12 @@ pub struct AddPair<'info> {
     //       mut,
     //       token::mint = lp_mint::
     //    )]
-
     pub token_0_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(mut)]
     pub token_1_mint: Box<InterfaceAccount<'info, Mint>>,
 
     #[account(
-        mut, 
-        token::mint = token_0_mint,
-        token::authority = signer,
+        mut,token::mint = token_0_mint,token::authority = signer
     )]
     pub token_0_account: Box<InterfaceAccount<'info, TokenAccount>>,
 
@@ -81,16 +78,15 @@ pub struct AddPair<'info> {
 
     #[account(mut)]
     pub signer: Signer<'info>,
-
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-
-fn validate_order(token_0: Pubkey, token_1: Pubkey) ->  bool {
-      if token_0 > token_1 { 
-          false
-      } else { 
+fn validate_order(token_0: Pubkey, token_1: Pubkey) -> bool {
+    if token_0 > token_1 {
+        false
+    } else {
         true
-      }
+    }
 }
