@@ -1,8 +1,8 @@
 //! Instruction: InitializePriceData
 use anchor_lang::prelude::*;
-use anchor_spl::{associated_token,token};
-use anchor_spl::token::Token;
 use anchor_spl::associated_token::AssociatedToken;
+use anchor_spl::token::Token;
+use anchor_spl::{associated_token, token};
 
 use crate::state::*;
 
@@ -43,8 +43,7 @@ pub struct FundPool<'info> {
        init_if_needed,
        payer = payer,
        associated_token::mint = mint,
-       associated_token::authority = pool, 
-    
+       associated_token::authority = pool
     )]
     pub pool_token_account: Account<'info, token::TokenAccount>,
 

@@ -1,0 +1,58 @@
+{
+    "assets": [
+        {
+            "name": "Cannon",
+            "symbol": "CAN",
+            "decimals": 9,
+            "quantity": 100,
+            "description": "A cannon for defending yer ship!",
+            "imagePath": "./assets/cannon.png",
+            "imageName": "cannon.png",
+            "address": "AVynkq1xUCAvvtLrN6q8AbjxvVkQ9ZvHtBALGXeRP5hg",
+            "secret":[
+                33,77,69,136,162,188,51,94,228,189,154,96,20,15,210,224,26,144,139,9,56,24,55,148,152,13,29,181,228,202,45,29,5,181,82,121,129,140,40,133,28,59,248,209,151,159,88,247,169,137,217,179,198,108,153,246,104,144,51,238,157,139,131,194
+            ]
+            
+        },
+        {
+            "name": "Cannon Ball",
+            "symbol": "CANB",
+            "decimals": 9,
+            "quantity": 100,
+            "description": "Cannon balls for yer cannons!",
+            "imagePath": "./assets/cannon-ball.png",
+            "imageName": "cannon-ball.png",
+            "address": "DfRtW1tMsxBX5YQiwsN5aZ1tpocmLYh3AJcmUU8KyJ4y",
+            "secret":[
+                103,25,148,39,209,179,128,187,205,224,186,35,36,195,123,59,212,58,174,127,35,102,97,98,33,44,214,23,41,254,128,115,141,37,168,9,121,24,148,213,247,187,47,127,156,138,96,215,247,178,236,220,33,212,84,92,170,156,162,202,97,10,236,215
+            ]
+    
+        },
+        {
+            "name": "Compass",
+            "symbol": "COMP",
+            "decimals": 9,
+            "quantity": 100,
+            "description": "A compass to navigate the seven seas!",
+            "imagePath": "./assets/compass.png",
+            "imageName": "compass.png",
+            "address": "4SyQXJZCaE3VgSN3uoPa1cE5pfMaxE74FFMCppfh71v7",
+            "secret":[
+                99,158,250,51,110,213,47,108,3,174,126,168,89,62,221,219,156,62,216,7,53,77,23,16,85,236,204,245,131,166,24,193,51,58,91,229,210,135,54,187,182,56,234,250,62,180,114,231,196,33,253,253,100,80,63,241,245,255,187,137,147,243,135,120
+            ]
+        },
+        {
+            "name": "Gold",
+            "symbol": "GOLD",
+            "decimals": 9,
+            "quantity": 100,
+            "description": "Ahh the finest gold in all of these waters!",
+            "imagePath": "./assets/coin1-tp.png",
+            "imageName": "coin1-tp.png",
+            "address": "JBQ9EyDo8C4auxS3t4Q96cHYgbNYWJqHh55h92RatY7m",
+            "secret":[
+                26,49,126,247,122,106,115,79,223,242,85,104,164,237,50,102,26,161,136,191,64,63,204,250,81,66,193,30,243,1,221,134,255,64,167,21,200,57,203,37,156,105,22,100,17,143,150,53,21,51,133,113,66,119,67,25,74,93,64,10,213,58,223,44
+            ]
+        }
+    ]
+}

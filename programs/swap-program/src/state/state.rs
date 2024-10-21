@@ -102,9 +102,9 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
         payer: &Signer<'info>,
         system_program: &Program<'info, System>,
     ) -> Result<()> {
-        match self.contains_asset(&key) {
-            true => return Err(SwapProgramError::InvalidAssetAlreadyInPool.into()),
-            false => {
+        match self.check_asset_key(&key) {
+            Ok(()) => (),
+            Err(_) => {
                 // reallcate pool size
                 self.realloc(32, payer, system_program)?;
                 self.assets.push(key)
@@ -158,7 +158,7 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
     ) -> Result<()> {
         let (mint, from, to, amount) = deposit;
         self.add_asset(mint.key(), authority, system_program)?;
-         process_transfer_to_pool(from, to, amount, authority, token_program)?;
+        process_transfer_to_pool(from, to, amount, authority, token_program)?;
         Ok(())
     }
 
@@ -176,7 +176,7 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
     /// Once calculated, it will process both transfers
     fn process_swap(
         &mut self,
-        receive:(
+        receive: (
             &Account<'info, Mint>,
             &Account<'info, TokenAccount>,
             &Account<'info, TokenAccount>,
@@ -190,29 +190,41 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
         authority: &Signer<'info>,
         token_program: &Program<'info, Token>,
     ) -> Result<()> {
-        // (From, To) 
+        // (From, To)
         let (receive_mint, pool_receive, payer_receive) = receive;
         self.check_asset_key(&receive_mint.key())?;
-        
-        // (From, To) 
-        let (pay_mint, payer_pay_token, pool_pay,pay_amount) = pay;
+
+        // (From, To)
+        let (pay_mint, payer_pay_token, pool_pay, pay_amount) = pay;
         self.check_asset_key(&pay_mint.key())?;
         // Determine the amount the payer will recieve of the requested asset
         let receive_amount = determine_swap_receive(
-            pool_receive.amount, 
-            receive_mint.decimals, 
-            payer_pay_token.amount, 
-            pay_mint.decimals, 
-            pay_amount
+            pool_receive.amount,
+            receive_mint.decimals,
+            payer_pay_token.amount,
+            pay_mint.decimals,
+            pay_amount,
         )?;
 
         if receive_amount == 0 {
             return Err(SwapProgramError::InvalidSwapNotEnoughPay.into());
         }
 
-        process_transfer_to_pool(payer_pay_token, pool_pay, pay_amount, authority, token_program)?;
+        process_transfer_to_pool(
+            payer_pay_token,
+            pool_pay,
+            pay_amount,
+            authority,
+            token_program,
+        )?;
 
-        process_transfer_from_pool(pool_receive, payer_receive, receive_amount, self, token_program)?;
+        process_transfer_from_pool(
+            pool_receive,
+            payer_receive,
+            receive_amount,
+            self,
+            token_program,
+        )?;
 
         Ok(())
     }
@@ -225,7 +237,6 @@ fn process_transfer_to_pool<'info>(
     autothority: &Signer<'info>,
     token_program: &Program<'info, Token>,
 ) -> Result<()> {
- 
     let cpi = CpiContext::new(
         token_program.to_account_info(),
         Transfer {
@@ -241,7 +252,7 @@ fn process_transfer_from_pool<'info>(
     from: &Account<'info, TokenAccount>,
     to: &Account<'info, TokenAccount>,
     amount: u64,
-    pool:&Account<'info, LiquidityPool>,
+    pool: &Account<'info, LiquidityPool>,
     token_program: &Program<'info, Token>,
 ) -> Result<()> {
     let signer_seeds: &[&[&[u8]]] = &[&[LiquidityPool::SEED_PREFIX.as_bytes(), &[pool.bump]]];

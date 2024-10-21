@@ -37,4 +37,7 @@ pub enum SwapProgramError {
     // When user tries to add a asset key which is already in the pool
     #[msg("The asset is already in the pool")]
     InvalidAssetAlreadyInPool,
+
+    #[msg("token_0 token_1 mismatch")]
+    InvalidInputTokensMismatch,
 }

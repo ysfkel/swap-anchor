@@ -8,18 +8,19 @@ import fs from 'fs'
 import path from 'path';
 import * as anchor from "@coral-xyz/anchor";
 import type { PublicKey } from '@metaplex-foundation/umi-public-keys';
-import { assets } from './data';
-import { secretKey } from './keys'
+import { getAssets } from '../data';
+import { getSignerByCluster } from '../util/wallet';
 
 export function getSigner(umi: Umi): KeypairSigner{
-  const k = Keypair.fromSecretKey(Uint8Array.from(secretKey))
-  const solanaPublicKeyBase58 = k.publicKey.toBase58();
-  const umiPKey: PublicKey = publicKey(solanaPublicKeyBase58);
-  const kps = createSignerFromKeypair(umi, {
-    publicKey: umiPKey,
-    secretKey: k.secretKey
-  });
-  return kps
+
+    const signer = getSignerByCluster(umi.rpc.getCluster());
+            const solanaPublicKeyBase58 = signer.publicKey.toBase58();
+            const umiPKey: PublicKey = publicKey(solanaPublicKeyBase58);
+            const kps = createSignerFromKeypair(umi, {
+                publicKey: umiPKey,
+                secretKey: signer.secretKey
+            });
+            return kps
 }
 
 function usePlugins(umi:Umi, kps: KeypairSigner): Umi{
@@ -31,7 +32,7 @@ function usePlugins(umi:Umi, kps: KeypairSigner): Umi{
 
 function _createUmi(): Umi {
   const provider = anchor.AnchorProvider.env();
-  const connection = new Connection("https://api.devnet.solana.com");
+  const { connection } = provider
   const umi = createUmi(connection);
    return umi
  }
@@ -56,18 +57,20 @@ function _createUmi(): Umi {
   }
  }
 
- async function uoloadMetadata() {
+ async function uploadMetadata() {
     const umi = initUmi() 
+    const assets = getAssets();
     for(let a of assets) {
-      const image_uri =  await upload(a.imagePath) 
-      const uri = await umi.uploader.uploadJson({
-         name: a.name,
-         symbol: a.symbol,
-         describe: a.description,
-         image: image_uri[0]
-      })
+    //   const image_uri =  await upload(a.imagePath) 
+    //   const uri = await umi.uploader.uploadJson({
+    //      name: a.name,
+    //      symbol: a.symbol,
+    //      describe: a.description,
+    //      image: image_uri[0]
+    //   })
       const mint = generateSigner(umi)
       const authority = getSigner(umi)
+      const uri=null
       const result = await createV1(umi, {
         mint,
         authority,
@@ -84,20 +87,13 @@ function _createUmi(): Umi {
  }
  
  
- (async () => {
-  try {
-    await uoloadMetadata();
-    console.log('->> completed');
-  } catch (error) {
-    console.error('Error in test function:', error);
-  }
-})(); 
+//  (async () => {
+//   try {
+//     await uploadMetadata();
+//     console.log('->> completed');
+//   } catch (error) {
+//     console.error('Error in test function:', error);
+//   }
+// })(); 
 
-
-/*
-uploaded tokens 
-name: Cannon mint: 2yySMFSgMjqBLBkG3q4jqStuatpNSYW2zhmkA6EcVyqj
-name: Cannon Ball mint: 3uJueG98BiWD1UtoF41keKP11YekfqU3a1pKF1uu527K
-name: Compass mint: Fr9djZd3nfNWMfeZjv5esNqSEKskdikvAwqWChWaAxEm
-name: Gold mint: 6pLSSw5Bqv4sD3zfbZJdv3oajwLoEPVF3z2gtTaf3LcA
-*/
+ 

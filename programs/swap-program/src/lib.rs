@@ -1,11 +1,13 @@
 pub mod error;
 pub mod instructions;
+pub mod seeds;
 pub mod state;
+pub mod util;
 
 use anchor_lang::prelude::*;
 use instructions::*;
 
-declare_id!("8zqSfMnEpWih9EbDqGRrkG97o3NSX8ojwwoYh9sqdmn7");
+declare_id!("9aRBo71kfSnqkN5Ls8giHnVmaAzT96XKQYGbixRwxoLU");
 
 #[program]
 pub mod swap_program {
@@ -14,6 +16,11 @@ pub mod swap_program {
     /// Initialize the program by creating the liquidity pool
     pub fn create_pool(ctx: Context<CreatePool>) -> Result<()> {
         instructions::create_pool(ctx)
+    }
+
+    pub fn add_pair(ctx: Context<AddPair>) -> Result<()> {
+        //instructions::add_pair(ctx)
+        Ok(())
     }
 
     /// Provide liquidity to the pool by funding it with some asset
