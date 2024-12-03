@@ -40,4 +40,7 @@ pub enum SwapProgramError {
 
     #[msg("token_0 token_1 mismatch")]
     InvalidInputTokensMismatch,
+
+    #[msg("Invalid owner")]
+    InvalidOwner,
 }

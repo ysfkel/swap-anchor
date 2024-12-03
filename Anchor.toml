@@ -6,7 +6,7 @@ skip-lint = false
 
 [programs.localnet]
 # [programs.devnet]
-swap_program = "26SLSwPP1Ai5ECS38nd7Ju96KrBUB96mSB2KwziSCVSX"
+swap_program = "a1uJXdggmTJsbtLZBbTzoSNix7yD2uSaRULM2tqbCmH"
 
 [registry]
 url = "https://api.apr.dev"
@@ -20,6 +20,6 @@ wallet = "~/.config/solana/id.json"
 # test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/tests/**/*.ts"
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
 
-# upload-json = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/upload-json.test.ts"
-# upload = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/upload.test.ts"
-# token = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/util/token.ts"
+upload-json = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/upload-json.test.ts"
+upload = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/upload.test.ts"
+token = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/util/token.ts"

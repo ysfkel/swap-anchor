@@ -34,19 +34,19 @@ export async function getMintInfo(mintAccount: PublicKey) {
 }
 
 
-// (async () => {
-//     try {
-//         const connection = getConnection();
-//         const mint = getKeypair(getAssets()[0].secret)
-//         const signer =  getPayer();
-//         const tokenAccount = getTokenAccount(mint.publicKey, signer, signer.publicKey, connection);
-//         const tokenAccountAddress =  (await tokenAccount).address
-//         const authority = signer.publicKey;
-//         const signature = await mintTokens(mint.publicKey, signer, tokenAccountAddress , authority, 100000000000, connection)
-//         await connection.confirmTransaction(signature, 'finalized');
-//         await getMintInfo(mint.publicKey)
-//         await getTokenAccountBalance(connection, tokenAccountAddress)
-//         } catch(e) {
-//             console.log(e)
-//         }
-// })();
+(async () => {
+    try {
+        const connection = getConnection();
+        const mint = getKeypair(getAssets()[0].secret)
+        const signer =  getPayer();
+        const tokenAccount = getTokenAccount(mint.publicKey, signer, signer.publicKey, connection);
+        const tokenAccountAddress =  (await tokenAccount).address
+        const authority = signer.publicKey;
+        const signature = await mintTokens(mint.publicKey, signer, tokenAccountAddress , authority, 100000000000, connection)
+        await connection.confirmTransaction(signature, 'finalized');
+        await getMintInfo(mint.publicKey)
+        await getTokenAccountBalance(connection, tokenAccountAddress)
+        } catch(e) {
+            console.log(e)
+        }
+})();

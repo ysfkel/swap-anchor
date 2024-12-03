@@ -7,7 +7,16 @@ pub mod util;
 use anchor_lang::prelude::*;
 use instructions::*;
 
-declare_id!("26SLSwPP1Ai5ECS38nd7Ju96KrBUB96mSB2KwziSCVSX");
+declare_id!("a1uJXdggmTJsbtLZBbTzoSNix7yD2uSaRULM2tqbCmH");
+
+pub mod admin {
+    use anchor_lang::prelude::declare_id;
+    #[cfg(feature = "devnet")]
+    declare_id!("a1uJXdggmTJsbtLZBbTzoSNix7yD2uSaRULM2tqbCmH");
+ 
+    #[cfg(not(feature = "devnet"))]
+    declare_id!("a1uJXdggmTJsbtLZBbTzoSNix7yD2uSaRULM2tqbCmH");
+}
 
 #[program]
 pub mod swap_program {

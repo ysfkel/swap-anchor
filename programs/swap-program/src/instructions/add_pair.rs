@@ -29,7 +29,7 @@ pub struct AddPair<'info> {
     #[account(
     init,
     seeds = [LP_SEED,token_0_mint.key().as_ref(),token_1_mint.key().as_ref()],
-    constraint = validate_order(token_0_mint.key(),token_1_mint.key()) @ InvalidInputTokensMismatch,
+    constraint = validate_token_order(token_0_mint.key(),token_1_mint.key()) @ InvalidInputTokensMismatch,
     bump,
     payer = signer,
     mint::authority = authority,
@@ -47,19 +47,7 @@ pub struct AddPair<'info> {
     )]
     pub lp_account: Box<InterfaceAccount<'info, TokenAccount>>,
 
-    //    #[account(
-    //        seeds = [
-    //         PAIR_SEED,
-
-    //        ],
-    //        bump
-    //    )]
-    //    pub pair: UncheckedAccount<'info>,
-
-    //    #[account(
-    //       mut,
-    //       token::mint = lp_mint::
-    //    )]
+   
     pub token_0_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(mut)]
     pub token_1_mint: Box<InterfaceAccount<'info, Mint>>,
@@ -83,7 +71,7 @@ pub struct AddPair<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-fn validate_order(token_0: Pubkey, token_1: Pubkey) -> bool {
+fn validate_token_order(token_0: Pubkey, token_1: Pubkey) -> bool {
     if token_0 > token_1 {
         false
     } else {

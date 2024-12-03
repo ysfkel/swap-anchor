@@ -1,1 +1,15 @@
- 
+Storage account created with signature: 7xsFzxrAkYNNJjJY6a514H8peCFaKoujep8c3ZkSHNd7G5gGstZt8RwoCfpLuf8mjuavHZBTXnriazjD9biAYx2
+
+Storage account public key: EWGD7f52QgvYermNFNpvwkKKv5MCL49Pyg7WZUPTb6BV
+
+mint secretKey ->>: 
+mint name: Cannon mint public key: 
+
+mint secretKey ->>: 
+mint name: Cannon Ball mint public key: 
+
+mint secretKey ->>: 
+mint name: Compass mint public key: 
+
+mint secretKey ->>: 
+mint name: Gold mint public key: 

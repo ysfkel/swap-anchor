@@ -8,6 +8,7 @@ import { getAccountInfo, getMintInfo, getTokenAccount, getTokenAccountBalance, m
 import { getKeypair, getSignerByCluster } from "../util/wallet";
 import { getClusterFromRpcEndpoint } from "../util/provider";
 import { add_pair } from "../instructions/add_pair";
+import { Account } from "@solana/spl-token";
 describe("swap-program", () => {
   const LIQUIDITY_POOL_SEED_PREFIX = "liquidity_pool";
   const AUTH_SEED = "AUTH_SEED";
@@ -18,7 +19,7 @@ describe("swap-program", () => {
   anchor.setProvider(provider);
   const payer =  getSignerByCluster(getClusterFromRpcEndpoint(provider.connection.rpcEndpoint));
 
-  
+  console.log('payer public ->>', payer.publicKey)
   const { connection } = provider;
   
   let poolAddress; 
@@ -91,18 +92,17 @@ describe("swap-program", () => {
 
    it('add asset', async () => {
       const asset1 = assets[0]
-      const tokenAccount1 =  getTokenAccount(asset1.address, payer, payer.publicKey, connection);
+      const tokenAccount1 =  await getTokenAccount(asset1.address, payer, payer.publicKey, connection);
 
       const asset2 = assets[1]
-      const tokenAccount2 =  getTokenAccount(asset2.address, payer, payer.publicKey, connection);
+      const tokenAccount2 =  await getTokenAccount(asset2.address, payer, payer.publicKey, connection);
 
-      const { token0Mint, token1Mint} = order(asset1.address,asset2.address )
-
+      const { token0, token1} = orderA(tokenAccount1, tokenAccount2 )
 
    let lp_mint: PublicKey; 
     try {
         lp_mint = PublicKey.findProgramAddressSync(
-        [Buffer.from(LP_SEED), token0Mint.toBuffer(), token1Mint.toBuffer()],
+        [Buffer.from(LP_SEED), token0.mint.toBuffer(), token1.mint.toBuffer()],
         program.programId
         )[0];
     
@@ -115,14 +115,14 @@ describe("swap-program", () => {
         mint: lp_mint,
         owner: payer.publicKey
     })
-
+ 
       await add_pair(
          authority,
          payer,
-         token0Mint,
-         token1Mint,
-         (await tokenAccount1).address,
-         (await tokenAccount2).address,
+         token0.mint,
+         token1.mint,
+          token0.address,
+          token1.address,
          lp_mint,
          lp_account,
          program
@@ -130,6 +130,20 @@ describe("swap-program", () => {
 
    })
 });
+
+function orderA(a: Account, b: Account) : {token0: Account,token1: Account} {
+   if (a.mint > b.mint) {
+      return {
+          token0: b,
+          token1: a
+      }
+   } else {
+       return {
+           token0: a,
+           token1: b
+       }
+   }
+}
 
 
 function order(a: PublicKey, b: PublicKey) : {token0Mint: PublicKey,token1Mint: PublicKey} {
