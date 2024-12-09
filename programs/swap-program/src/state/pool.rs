@@ -155,7 +155,7 @@ impl Pool {
           }
          
           Ok((
-            token_0_amount as u128 * Q32 as u128 / token_0_amount as u128,
+            token_1_amount as u128 * Q32 as u128 / token_0_amount as u128,
             token_0_amount as u128 * Q32 as u128 / token_1_amount as u128,
           ))
            
