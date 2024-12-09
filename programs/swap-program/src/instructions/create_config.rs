@@ -1,10 +1,9 @@
 use std::ops::{Deref, DerefMut};
 
 use anchor_lang::{prelude::*, solana_program::address_lookup_table::instruction};
-use crate::state::AmmConfig;
+use crate::state::config::AmmConfig;
 use crate::error::*;
 use crate::seeds::AMM_CONFIG_SEED;
-
 
 pub fn create_config(ctx: Context<CreateAmmConfig>,
     index: u16,

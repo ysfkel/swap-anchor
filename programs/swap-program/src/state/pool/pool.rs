@@ -2,25 +2,10 @@ use anchor_lang::prelude::*;
 use anchor_spl::token_interface::Mint;
 use std::ops::{BitAnd, BitOr, BitXor};
 use crate::error::SwapProgramError;
+use super::constants::*;
+use super::types::*;
+use super::traits::*;
 /// Seed to derive account address and signature
-pub const POOL_SEED: &str = "pool";
-pub const POOL_LP_MINT_SEED: &str = "pool_lp_mint";
-pub const POOL_VAULT_SEED: &str = "pool_vault";
-
-pub const Q32: u128 = (u32::MAX as u128) + 1;
-
-pub enum PoolOperation {
-    Deposit,
-    Withdraw, 
-    Swap,
-}
-
-#[derive(PartialEq, Eq)]
-pub enum PoolOperationStatus {
-    Enable,
-    Disable
-}
-
 
 pub struct Pool {
     pub amm_config: Pubkey,
@@ -109,32 +94,13 @@ impl Pool {
         self.padding = [0u64;31];
     }
 
-    /// a sing bite is used to represent all pool operations for storage efficiency
-    pub fn set_operation_statuses(&mut self, status: u8) {
-        self.status = status; 
-    }
-
-    pub fn set_operation_status(&mut self, pool_operation: PoolOperation, status: PoolOperationStatus) {
-        let pool_operation_bit = u8::from(1) << (pool_operation as u8);
-
-        match status {
-            PoolOperationStatus::Disable => {
-                self.status = self.status.bitor(pool_operation_bit);
-            },
-            PoolOperationStatus::Enable => {
-                let mask = u8::from(255).bitxor(pool_operation_bit);
-                self.status = self.status.bitand(mask);
-
-            }
-        }
-    }
 
     pub fn get_operation_status(&self, pool_operation: PoolOperation) -> bool {
         let status = u8::from(1) << (pool_operation as u8);
         self.status.bitand(status) == 0
     }
 
-    pub fn net_vault_amount(&self, vault_0: u64, vault_1: u64) -> Result<(u64, u64)> {
+    pub fn get_net_vault_amount(&self, vault_0: u64, vault_1: u64) -> Result<(u64, u64)> {
         let token_0_amount = vault_0.checked_sub(self.fund_fees_token_0 + self.fund_fees_token_0)
         .ok_or(SwapProgramError::InsufficientPoolBalance)?;
 
@@ -144,7 +110,7 @@ impl Pool {
         Ok((token_0_amount,token_1_amount))
     }
 
-    pub fn pool_price(&self, vault_0: u64, vault_1: u64) -> Result<(u128, u128)> {
+    pub fn get_pool_price(&self, vault_0: u64, vault_1: u64) -> Result<(u128, u128)> {
           let (token_0_amount,token_1_amount) = self.net_vault_amount(vault_0, vault_1)?;
 
           if token_0_amount == 0 {
@@ -162,4 +128,26 @@ impl Pool {
            
     }
  
+}
+
+impl IPoolAdmin for Pool {
+        /// a sing bite is used to represent all pool operations for storage efficiency
+         fn set_operation_statuses(&mut self, status: u8) {
+            self.status = status; 
+        }
+    
+         fn set_operation_status(&mut self, pool_operation: PoolOperation, status: PoolOperationStatus) {
+            let pool_operation_bit = u8::from(1) << (pool_operation as u8);
+    
+            match status {
+                PoolOperationStatus::Disable => {
+                    self.status = self.status.bitor(pool_operation_bit);
+                },
+                PoolOperationStatus::Enable => {
+                    let mask = u8::from(255).bitxor(pool_operation_bit);
+                    self.status = self.status.bitand(mask);
+    
+                }
+            }
+        }
 }
