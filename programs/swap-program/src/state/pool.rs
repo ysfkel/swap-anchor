@@ -112,7 +112,7 @@ impl Pool {
         self.status = status;
     }
 
-    pub fn set_status_by_byt(&mut self, pool_operation: PoolOperation, status: PoolOperationStatus) {
+    pub fn set_status_by_bit(&mut self, pool_operation: PoolOperation, status: PoolOperationStatus) {
         let pool_operation_bit = u8::from(1) << (pool_operation as u8);
 
         match status {
