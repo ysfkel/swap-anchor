@@ -109,11 +109,12 @@ impl Pool {
         self.padding = [0u64;31];
     }
 
-    pub fn set_operation_status(&mut self, status: u8) {
-        self.status = status;
+    /// a sing bite is used to represent all pool operations for storage efficiency
+    pub fn set_operation_statuses(&mut self, status: u8) {
+        self.status = status; 
     }
 
-    pub fn set_operation_status_by_bit(&mut self, pool_operation: PoolOperation, status: PoolOperationStatus) {
+    pub fn set_operation_status(&mut self, pool_operation: PoolOperation, status: PoolOperationStatus) {
         let pool_operation_bit = u8::from(1) << (pool_operation as u8);
 
         match status {
@@ -128,7 +129,7 @@ impl Pool {
         }
     }
 
-    pub fn get_operation_status_by_bit(&self, pool_operation: PoolOperation) -> bool {
+    pub fn get_operation_status(&self, pool_operation: PoolOperation) -> bool {
         let status = u8::from(1) << (pool_operation as u8);
         self.status.bitand(status) == 0
     }
