@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token_interface::Mint;
 use std::ops::{BitAnd, BitOr, BitXor};
+use crate::error::SwapProgramError;
 /// Seed to derive account address and signature
 pub const POOL_SEED: &str = "pool";
 pub const POOL_LP_MINT_SEED: &str = "pool_lp_mint";
@@ -108,11 +109,11 @@ impl Pool {
         self.padding = [0u64;31];
     }
 
-    pub fn set_status(&mut self, status: u8) {
+    pub fn set_operation_status(&mut self, status: u8) {
         self.status = status;
     }
 
-    pub fn set_status_by_bit(&mut self, pool_operation: PoolOperation, status: PoolOperationStatus) {
+    pub fn set_operation_status_by_bit(&mut self, pool_operation: PoolOperation, status: PoolOperationStatus) {
         let pool_operation_bit = u8::from(1) << (pool_operation as u8);
 
         match status {
@@ -127,5 +128,37 @@ impl Pool {
         }
     }
 
+    pub fn get_operation_status_by_bit(&self, pool_operation: PoolOperation) -> bool {
+        let status = u8::from(1) << (pool_operation as u8);
+        self.status.bitand(status) == 0
+    }
 
+    pub fn net_vault_amount(&self, vault_0: u64, vault_1: u64) -> Result<(u64, u64)> {
+        let token_0_amount = vault_0.checked_sub(self.fund_fees_token_0 + self.fund_fees_token_0)
+        .ok_or(SwapProgramError::InsufficientPoolBalance)?;
+
+        let token_1_amount = vault_1.checked_sub(self.fund_fees_token_1 + self.fund_fees_token_1)
+        .ok_or(SwapProgramError::InsufficientPoolBalance)?;
+
+        Ok((token_0_amount,token_1_amount))
+    }
+
+    pub fn pool_price(&self, vault_0: u64, vault_1: u64) -> Result<(u128, u128)> {
+          let (token_0_amount,token_1_amount) = self.net_vault_amount(vault_0, vault_1)?;
+
+          if token_0_amount == 0 {
+             return Err(SwapProgramError::InsufficientPoolBalance.into());
+          }
+
+          if token_1_amount == 0 { 
+             return Err(SwapProgramError::InsufficientPoolBalance.into());
+          }
+         
+          Ok((
+            token_0_amount as u128 * Q32 as u128 / token_0_amount as u128,
+            token_0_amount as u128 * Q32 as u128 / token_1_amount as u128,
+          ))
+           
+    }
+ 
 }

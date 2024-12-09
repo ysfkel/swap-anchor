@@ -43,4 +43,7 @@ pub enum SwapProgramError {
 
     #[msg("Invalid owner")]
     InvalidOwner,
+
+    #[msg("Insufficient Pool Balance")]
+    InsufficientPoolBalance,
 }
