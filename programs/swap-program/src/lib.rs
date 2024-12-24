@@ -13,9 +13,18 @@ pub mod admin {
     use anchor_lang::prelude::declare_id;
     #[cfg(feature = "devnet")]
     declare_id!("a1uJXdggmTJsbtLZBbTzoSNix7yD2uSaRULM2tqbCmH");
- 
+
     #[cfg(not(feature = "devnet"))]
     declare_id!("a1uJXdggmTJsbtLZBbTzoSNix7yD2uSaRULM2tqbCmH");
+}
+
+
+pub mod create_pool_tresury {
+    use anchor_lang::prelude::declare_id;
+    #[cfg(feature = "devnet")]
+    declare_id!("G11FKBRaAkHAKuLCgLM6K6NUc9rTjPAznRCjZifrTQe2");
+    #[cfg(not(feature = "devnet"))]
+    declare_id!("DNXgeM9EiiaAbaWvwjHj9fQQLAX5ZsfHyvmYUNRAdNC8");
 }
 
 #[program]
@@ -25,11 +34,6 @@ pub mod swap_program {
     /// Initialize the program by creating the liquidity pool
     pub fn create_pool(ctx: Context<CreatePool>) -> Result<()> {
         instructions::create_pool(ctx)
-    }
-
-    pub fn add_pair(ctx: Context<AddPair>) -> Result<()> {
-        //instructions::add_pair(ctx)
-        Ok(())
     }
 
     /// Provide liquidity to the pool by funding it with some asset

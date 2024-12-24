@@ -1,9 +1,8 @@
-pub mod add_pair;
-pub mod create_prool;
+pub mod create_config;
+pub mod create_pool;
 pub mod fund_pool;
 pub mod swap;
-pub mod create_config;
-pub use add_pair::*;
-pub use create_prool::*;
+
+pub use create_pool::*;
 pub use fund_pool::*;
 pub use swap::*;

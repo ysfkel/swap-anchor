@@ -1,11 +1,11 @@
 pub enum PoolOperation {
     Deposit,
-    Withdraw, 
+    Withdraw,
     Swap,
 }
 
 #[derive(PartialEq, Eq)]
 pub enum PoolOperationStatus {
     Enable,
-    Disable
+    Disable,
 }
